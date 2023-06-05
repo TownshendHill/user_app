@@ -22,11 +22,6 @@ export default {
       isLoading: false,
     };
   },
-  computed: {
-    fullName() {
-      return `${this.user.name.first} ${this.user.name.last}`;
-    },
-  },
   async created() {
     this.isLoading = true;
     try {
