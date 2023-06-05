@@ -1,28 +1,54 @@
 <template>
-	<div id="app">
-		<!-- <img alt="Vue logo" src="./assets/logo.png"> -->
-		<HelloWorld msg="Welcome to Your Vue.js App" />
-	</div>
+  <div id="app">
+    <p v-if="isLoading">Loading.....</p>
+    <div v-else>
+      <UserCard :userInfo="user" />
+    </div>
+  </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import { getUsers } from "@/api";
+import UserCard from "@/components/UserCard";
 
 export default {
-	name: "App",
-	components: {
-		HelloWorld,
-	},
+  name: "App",
+  components: {
+    UserCard,
+  },
+  data() {
+    return {
+      user: {},
+      isLoading: false,
+    };
+  },
+  computed: {
+    fullName() {
+      return `${this.user.name.first} ${this.user.name.last}`;
+    },
+  },
+  async created() {
+    this.isLoading = true;
+    try {
+      const response = await getUsers();
+      this.user = response.data.results[0];
+      console.log("user", this.user);
+    } catch (error) {
+      console.error("error", error);
+    } finally {
+      this.isLoading = false;
+    }
+  },
 };
 </script>
 
 <style>
 #app {
-	font-family: Avenir, Helvetica, Arial, sans-serif;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	text-align: center;
-	color: #2c3e50;
-	margin-top: 60px;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
 }
 </style>
