@@ -1,11 +1,14 @@
 <template>
-	<div class="user-card">
+	<v-card class="user-card">
+		<p>test</p>
 		<div class="user-avatar">
 			<img :src="userInfo.picture.large" alt="" />
 		</div>
-		<p class="full-name">{{ fullName }}</p>
-		<p>age: {{ userInfo.dob.age }}</p>
-	</div>
+		<v-card-item>
+			<v-card-title class="full-name">{{ fullName }}</v-card-title>
+			<v-card-subtitle>age: {{ userInfo.dob.age }}</v-card-subtitle>
+		</v-card-item>
+	</v-card>
 </template>
 
 <script>
