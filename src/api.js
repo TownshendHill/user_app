@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const BASE_URL = "https://randomuser.me/api/?results=20";
+const BASE_URL = "https://randomuser.me/api/";
 
-const getUsers = () => {
+const getUsers = (numOfUsers = 10) => {
 	return axios
-		.get(BASE_URL)
+		.get(`${BASE_URL}?results=${numOfUsers}`)
 		.then(function (response) {
 			// handle success
 			return response;

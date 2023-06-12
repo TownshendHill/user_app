@@ -2,11 +2,24 @@
 	<div id="app">
 		<p v-if="isLoading">Loading.....</p>
 		<div v-else>
-			<!-- <UserCard :userInfo="user" /> -->
+			<v-row>
+				<v-col cols="8">
+					<v-text-field
+						label="Number of users"
+						:rules="digitsRules"
+						v-model="numOfUsers"
+					></v-text-field>
+				</v-col>
+				<v-col cols="4">
+					<v-btn @click="onGetUsersClick">Get users</v-btn>
+				</v-col>
+			</v-row>
+			<div>num of users: {{ numOfUsers }}</div>
 			<UserCard
 				v-for="(user, index) in users"
 				:key="index"
 				:userInfo="user"
+				:isEven="index % 2 === 0"
 			></UserCard>
 		</div>
 	</div>
@@ -23,23 +36,41 @@ export default {
 	},
 	data() {
 		return {
-			user: {},
 			users: [],
 			isLoading: false,
+			numOfUsers: 10,
+			digitsRules: [(v) => /^\d+$/.test(v) || "Only digits are allowed"],
 		};
 	},
 	async created() {
+		console.log("App created");
 		this.isLoading = true;
 		try {
-			const response = await getUsers();
-			this.user = response.data.results[0];
+			const response = await getUsers(this.numOfUsers);
 			this.users = response.data.results;
-			console.table("App.vue users", this.users);
 		} catch (error) {
 			console.error("error", error);
 		} finally {
 			this.isLoading = false;
 		}
+	},
+	methods: {
+		async onGetUsersClick() {
+			try {
+				const response = await getUsers(this.numOfUsers);
+				this.users = response.data.results;
+			} catch (error) {
+				console.error("error", error);
+			} finally {
+				this.isLoading = false;
+			}
+		},
+	},
+	beforeUpdate() {
+		console.log("App beforeUpdate");
+	},
+	updated() {
+		console.log("App updated");
 	},
 };
 </script>
