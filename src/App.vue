@@ -24,6 +24,7 @@
 		</div>
 	</div>
 </template>
+<!-- comment -->
 
 <script>
 import { getUsers } from "@/api";
@@ -38,7 +39,7 @@ export default {
 		return {
 			users: [],
 			isLoading: false,
-			numOfUsers: 10,
+			numOfUsers: 5,
 			digitsRules: [(v) => /^\d+$/.test(v) || "Only digits are allowed"],
 		};
 	},
