@@ -1,21 +1,19 @@
 <template>
-	<div>
-		<v-card
-			class="user-card"
-			:class="{ female: isFemale }"
-			:style="{ backgrnoudColor: isFemale ? 'pink' : 'aqua' }"
-		>
-			<div class="user-avatar">
-				<img :src="userInfo.picture.large" alt="" />
-			</div>
-			<div class="user-info">
-				<v-card-title class="full-name">{{ fullName }}</v-card-title>
-				<v-card-subtitle>age: {{ userInfo.dob.age }}</v-card-subtitle>
-				<p v-if="isVipMember">Vip Member</p>
-			</div>
-		</v-card>
-		<hr v-if="isEven" />
-	</div>
+	<v-card
+		@click="onUserClick(userInfo)"
+		class="user-card"
+		:class="{ female: isFemale }"
+		:style="{ backgrnoudColor: isFemale ? 'pink' : 'aqua' }"
+	>
+		<div class="user-avatar">
+			<img :src="userInfo.picture.large" alt="" />
+		</div>
+		<div class="user-info">
+			<v-card-title class="full-name">{{ fullName }}</v-card-title>
+			<v-card-subtitle>age: {{ userInfo.dob.age }}</v-card-subtitle>
+			<p v-if="isVipMember">Vip Member</p>
+		</div>
+	</v-card>
 </template>
 
 <script>
@@ -42,6 +40,15 @@ export default {
 			return this.userInfo.registered.age >= 3;
 		},
 	},
+	methods: {
+		onUserClick(userInfo) {
+			console.log("clicked", userInfo);
+			this.$router.push({
+				name: "userDetail",
+				params: { id: userInfo.login.uuid, info: userInfo },
+			});
+		},
+	},
 	created() {
 		console.log("UserCard created");
 		console.log("userInfo", this.userInfo);
@@ -51,6 +58,9 @@ export default {
 	},
 	updated() {
 		console.log("UserCard updated");
+	},
+	beforeDestroy() {
+		console.log("UserCard destroyed");
 	},
 };
 </script>

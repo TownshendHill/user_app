@@ -1,70 +1,43 @@
 <template>
-	<div id="app">
-		<p v-if="isLoading">Loading.....</p>
-		<div v-else>
-			<v-row>
-				<v-col cols="8">
-					<v-text-field
-						label="Number of users"
-						:rules="digitsRules"
-						v-model="numOfUsers"
-					></v-text-field>
-				</v-col>
-				<v-col cols="4">
-					<v-btn @click="onGetUsersClick">Get users</v-btn>
-				</v-col>
-			</v-row>
-			<div>num of users: {{ numOfUsers }}</div>
-			<UserCard
-				v-for="(user, index) in users"
-				:key="index"
-				:userInfo="user"
-				:isEven="index % 2 === 0"
-			></UserCard>
-		</div>
-	</div>
+	<v-app id="app">
+		<v-container fluid class="pa-0">
+			<p v-if="isLoading">Loading.....</p>
+			<v-app-bar v-else class="pb-6">
+				<v-toolbar-title shrink-on-scroll> Users App </v-toolbar-title>
+				<v-tabs centered dense>
+					<v-tab>
+						<button @click="onRedirect('home')">Home</button>
+					</v-tab>
+					<v-tab>
+						<button @click="onRedirect('users')">Users</button>
+					</v-tab>
+				</v-tabs>
+			</v-app-bar>
+			<v-main class="teal lighten-5">
+				<v-container>
+					<v-sheet rounded class="transparent pa-4">
+						<transition mode="out-in">
+							<router-view />
+						</transition>
+					</v-sheet>
+				</v-container>
+			</v-main>
+		</v-container>
+	</v-app>
 </template>
 <!-- comment -->
 
 <script>
-import { getUsers } from "@/api";
-import UserCard from "@/components/UserCard";
-
 export default {
 	name: "App",
-	components: {
-		UserCard,
-	},
 	data() {
 		return {
-			users: [],
 			isLoading: false,
-			numOfUsers: 5,
-			digitsRules: [(v) => /^\d+$/.test(v) || "Only digits are allowed"],
 		};
 	},
-	async created() {
-		console.log("App created");
-		this.isLoading = true;
-		try {
-			const response = await getUsers(this.numOfUsers);
-			this.users = response.data.results;
-		} catch (error) {
-			console.error("error", error);
-		} finally {
-			this.isLoading = false;
-		}
-	},
 	methods: {
-		async onGetUsersClick() {
-			try {
-				const response = await getUsers(this.numOfUsers);
-				this.users = response.data.results;
-			} catch (error) {
-				console.error("error", error);
-			} finally {
-				this.isLoading = false;
-			}
+		onRedirect(name) {
+			this.$router.push({ name });
 		},
 	},
 	beforeUpdate() {
@@ -83,6 +56,25 @@ export default {
 	-moz-osx-font-smoothing: grayscale;
 	text-align: center;
 	color: #2c3e50;
-	margin-top: 60px;
+}
+
+.v-enter {
+	opacity: 0;
+}
+
+.v-enter-to {
+	opacity: 1;
+}
+.v-enter-active,
+.v-leave-active {
+	transition: opacity 0.2s;
+}
+
+.v-leave {
+	opacity: 1;
+}
+
+.v-leave-to {
+	opacity: 0;
 }
 </style>
