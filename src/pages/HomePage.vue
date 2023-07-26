@@ -1,6 +1,6 @@
 <template>
 	<div class="py-4">
-		<h1>Home M</h1>
+		<h1>Home</h1>
 		<api-form @send-api-params="submittedParams"></api-form>
 	</div>
 </template>
